@@ -8,7 +8,7 @@ import uuid
 account_dict = {}
 
 class Accounts():
-    
+
     def __init__(self, username: str, __password: str, phone_number: str | None, id: uuid) -> None:
         if self.is_valid_username(username):
             self.username = username
