@@ -39,7 +39,7 @@ class Accounts():
 
     
     def change_phone_user(self, new_user, new_phone):
-        new_password = self.__password
+        
         if new_phone == "":
             new_phone = self.phone_number
         
@@ -47,7 +47,7 @@ class Accounts():
             new_user = self.username
         
         
-        x = Accounts(new_user, new_password, new_phone, self.id)
+        x = Accounts(new_user, self.__password, new_phone, self.id)
         x.new_account(new_user) 
 
 
@@ -55,6 +55,7 @@ class Accounts():
         password = hashlib.md5(str.encode(password)).hexdigest()
         if username in account_dict:
             test_object = account_dict[f"{username}"]
+        
         if test_object.__password == password:
             return True 
         raise ValueError("No account Found!")
