@@ -3,31 +3,30 @@
 from getpass import getpass
 import hashlib
 from typing import Any
-import uuid
+from uuid import uuid4
 
-account_dict = {}
+
 
 class Accounts():
 
-    def __init__(self, username: str, __password: str, phone_number: str | None, id: uuid) -> None:
-        if self.is_valid_username(username):
-            self.username = username
-        
-        if self.is_valid_password(__password):
-            __password = hashlib.md5(str.encode(__password)).hexdigest()
-            self.__password = __password
-        
+    account_dict = {}    
+
+    def __init__(self, username: str, __password: str, phone_number=None) -> None:
+        self.username = username
+        self.__password = __password        
         self.phone_number = phone_number
-        self.id = id
+        self.id = uuid4()
 
-
-    def is_valid_username(self, username):
-        if username in account_dict:
+    
+    @staticmethod
+    def is_valid_username(username, dictionary: dict):
+        if username in dictionary:
             raise ValueError("username already exists")
         return True
     
-
-    def is_valid_password(self, password):
+    
+    @staticmethod
+    def is_valid_password(password):
         if len(password) < 4:
             raise ValueError("Password is too short.")
         return True
@@ -35,10 +34,14 @@ class Accounts():
     
     @classmethod
     def new_account(cls, username):
-        account_dict[f"{username}"] = cls
+        cls.account_dict[f"{username}"] = cls
 
     
-    def change_phone_user(self, new_user, new_phone):
+    def update_password(self):
+        pass
+
+    
+    def update_profile(self, new_user, new_phone):
         
         if new_phone == "":
             new_phone = self.phone_number
@@ -51,10 +54,10 @@ class Accounts():
         x.new_account(new_user) 
 
 
-    def check_login(username, password):
+    def login(self, username, password):
         password = hashlib.md5(str.encode(password)).hexdigest()
-        if username in account_dict:
-            test_object = account_dict[f"{username}"]
+        if username in self.account_dict:
+            test_object = self.account_dict[f"{username}"]
         
         if test_object.__password == password:
             return True 

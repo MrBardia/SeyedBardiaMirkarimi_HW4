@@ -28,10 +28,10 @@ def main():
                   username = input("Enter your username: ")
                   password = get_password()
                   phone_number = input("Enter your phone Number: ")
-                  x = uuid.uuid1()
-                  account1 = Accounts(username, password, phone_number, x)
+                  
+                  account1 = Accounts(username, password, phone_number)
                   account1.new_account(username) 
-                  print(users.account_dict)               
+                  print(users.Account.account_dict)               
             case "2":
                     pass
              
