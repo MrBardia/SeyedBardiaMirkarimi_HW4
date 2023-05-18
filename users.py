@@ -2,10 +2,12 @@
 
 
 import hashlib
+from getpass import getpass
 from uuid import uuid4
 
 
 class Accounts:
+
     account_dict = {}
 
     def __init__(self, username: str, __password: str, phone_number=None) -> None:
@@ -46,11 +48,34 @@ class Accounts:
         else:
             raise ValueError("username already exist.")
 
-    def update_password(self):
-        pass
+    @staticmethod
+    def update_password(old_password, account: "Accounts"):
+        old_password_hash = Accounts.build_pass(old_password)
+        if old_password_hash == account.__repr__():
+            new_password = getpass('input new Password: ')
+            confirm_new_password = getpass('input new password confirmation')
+            if new_password == confirm_new_password:
+                del account.account_dict[account.username]
+                new_pass_hash = Accounts.build_pass(new_password)
+                Accounts.new_account(account.username, new_pass_hash, account.phone_number)
+            else:
+                raise ValueError("Password confirmation is invalid!")
+        else:
+            raise ValueError("Password incorrect")
 
     def update_profile(self, new_user, new_phone):
-        pass
+        if new_user == "":
+            new_user = self.username
+        else:
+            pass
+
+        if new_phone == "":
+            new_phone = self.phone_number
+        else:
+            pass
+
+        del self.account_dict[self.username]
+        self.new_account(new_user, self.__password, new_phone)
 
     @classmethod
     def login(cls, username, password):

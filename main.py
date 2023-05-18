@@ -27,18 +27,23 @@ def main():
                 log_in_username = input("Please enter your username: ")
                 log_in_password = getpass("Please Enter Your password: ")
                 if Accounts.login(log_in_username, log_in_password):
+                    logged_user = Accounts.account_dict[log_in_username]
                     while True:
                         log_in_methods = input("Enter 1:info, 2:user and phone edit, 3:password reset, 4:exit : ")
                         match log_in_methods:
                             case "1":
-                                logged_user = Accounts.account_dict[log_in_username]
                                 print(logged_user)
                             case "2":
-                                pass
+                                new_username = input("Enter your new username: ")
+                                new_phone_number = input("Enter your new phone number: ")
+                                logged_user.update_profile(new_username, new_phone_number)
                             case "3":
-                                pass
+                                old_password = getpass("input your old password: ")
+                                Accounts.update_password(old_password, logged_user)
                             case "4":
                                 break
+                            case "5":
+                                print(Accounts.account_dict)
 
 
-main()
+
