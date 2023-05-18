@@ -6,6 +6,10 @@ from getpass import getpass
 
 def main():
     def get_password():
+        """
+        password input function with getpass() method and password confirmation.
+        :return: confirmed password value.
+        """
         while True:
             new_password = getpass("Enter Password: ")
             password_confirm = getpass("Confirm Password: ")
@@ -13,6 +17,7 @@ def main():
                 print("Password don't match!")
             break
         return new_password
+
     while True:
         option = input("Enter your Request Num (0 to exit, 1 to signup, 2 to login): ")
         match option:
@@ -39,11 +44,12 @@ def main():
                                 logged_user.update_profile(new_username, new_phone_number)
                             case "3":
                                 old_password = getpass("input your old password: ")
-                                Accounts.update_password(old_password, logged_user)
+                                logged_user.update_password(old_password)
                             case "4":
                                 break
                             case "5":
                                 print(Accounts.account_dict)
 
 
-
+if __name__ == "__main__":
+    main()

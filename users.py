@@ -7,7 +7,9 @@ from uuid import uuid4
 
 
 class Accounts:
-
+    """
+    A class to save accounts and have signup and login methods.
+    """
     account_dict = {}
 
     def __init__(self, username: str, __password: str, phone_number=None) -> None:
@@ -17,26 +19,49 @@ class Accounts:
         self.id = uuid4()
 
     @staticmethod
-    def build_pass(password):
+    def build_pass(password: str):
+        """
+        change normal string password to sha256 hash password
+        :param password: string
+        :return: sha256 hash password
+        """
         pass_hash = hashlib.sha256(str.encode(password)).hexdigest()
         return pass_hash
 
     @staticmethod
-    def is_valid_username(username, dictionary: dict):
-        if username in dictionary:
+    def is_valid_username(username: str, dictionary: dict) -> bool:
+        """
+        check for valid username in class dictionary database.
+        :param username: string
+        :param dictionary: class object
+        :return: Boolean
+        """
+        if username in dictionary or username.isspace():
             raise ValueError("username already exists")
         else:
             return True
 
     @staticmethod
-    def is_valid_password(password):
-        if len(password) < 4:
+    def is_valid_password(password: str) -> bool:
+        """
+        check for valid password length.
+        :param password: string
+        :return: Boolean
+        """
+        if len(password) < 4 or password.isspace():
             raise ValueError("Password is too short.")
         else:
             return True
 
     @classmethod
     def new_account(cls, username: str, __password: str, phone_number=None):
+        """
+        check validation of username and password and create a new account and save it in dictionary.
+        :param username: string
+        :param __password:  (private)
+        :param phone_number: string (optional)
+        :return: user object
+        """
         if cls.is_valid_username(username, cls.account_dict):
             if cls.is_valid_password(__password):
                 password = cls.build_pass(__password)
@@ -48,22 +73,31 @@ class Accounts:
         else:
             raise ValueError("username already exist.")
 
-    @staticmethod
-    def update_password(old_password, account: "Accounts"):
+    def update_password(self, old_password: str):
+        """
+        take old password for verification and set new password and save in dictionary.
+        :param old_password: string
+        :return: new account in dictionary
+        """
         old_password_hash = Accounts.build_pass(old_password)
-        if old_password_hash == account.__repr__():
+        if old_password_hash == self.__password:
             new_password = getpass('input new Password: ')
-            confirm_new_password = getpass('input new password confirmation')
+            confirm_new_password = getpass('input new password confirmation: ')
             if new_password == confirm_new_password:
-                del account.account_dict[account.username]
-                new_pass_hash = Accounts.build_pass(new_password)
-                Accounts.new_account(account.username, new_pass_hash, account.phone_number)
+                del self.account_dict[self.username]
+                self.new_account(self.username, new_password, self.phone_number)
             else:
-                raise ValueError("Password confirmation is invalid!")
+                raise ValueError("New password not confirmed.")
         else:
-            raise ValueError("Password incorrect")
+            raise ValueError("Invalid password.")
 
-    def update_profile(self, new_user, new_phone):
+    def update_profile(self, new_user: str, new_phone: str):
+        """
+        update username or phone number (optional) and if one is left blank it will use the old value.
+        :param new_user: string
+        :param new_phone: string
+        :return: new user object in class dictionary.
+        """
         if new_user == "":
             new_user = self.username
         else:
@@ -78,7 +112,13 @@ class Accounts:
         self.new_account(new_user, self.__password, new_phone)
 
     @classmethod
-    def login(cls, username, password):
+    def login(cls, username: str, password: str) -> bool:
+        """
+        check for username existence and valid password and return boolean.
+        :param username:
+        :param password:
+        :return:
+        """
         pass
         if username in cls.account_dict:
             user_test = cls.account_dict[username]
@@ -89,9 +129,6 @@ class Accounts:
                 raise ValueError("Invalid Password!")
         else:
             raise ValueError("Invalid username!")
-
-    def get_password(self):
-        return self.__password
 
     def __str__(self):
         return f"username: {self.username}, phone number: {self.phone_number}, id: {self.id}"
