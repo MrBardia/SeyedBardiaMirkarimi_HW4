@@ -137,5 +137,4 @@ class Accounts:
         return self.__password
 
 
-user = Accounts.new_account("bardia", "1234")
-Accounts.login("bardia", "1234")
+
