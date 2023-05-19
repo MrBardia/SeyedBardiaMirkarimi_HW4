@@ -47,8 +47,10 @@ def main():
                                 logged_user.update_password(old_password)
                             case "4":
                                 break
-                            case "5":
-                                print(Accounts.account_dict)
+                            case _:
+                                print("choose a right choice.")
+            case _:
+                print("choose a right choice.")
 
 
 if __name__ == "__main__":

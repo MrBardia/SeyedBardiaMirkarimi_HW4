@@ -36,7 +36,7 @@ class Accounts:
         :param dictionary: class object
         :return: Boolean
         """
-        if username in dictionary or username.isspace():
+        if username in dictionary or username.isspace() or len(username) == 0:
             raise ValueError("username already exists")
         else:
             return True
@@ -85,7 +85,8 @@ class Accounts:
             confirm_new_password = getpass('input new password confirmation: ')
             if new_password == confirm_new_password:
                 del self.account_dict[self.username]
-                self.new_account(self.username, new_password, self.phone_number)
+                new_user = self.new_account(self.username, new_password, self.phone_number)
+                self.account_dict[self.username] = new_user
             else:
                 raise ValueError("New password not confirmed.")
         else:
@@ -108,8 +109,11 @@ class Accounts:
         else:
             pass
 
+        old_user = self.account_dict[self.username]
         del self.account_dict[self.username]
-        self.new_account(new_user, self.__password, new_phone)
+        new_user_account = Accounts(new_user, old_user.__repr__(), new_phone)
+        print(new_user_account, new_user_account.__repr__())
+        self.account_dict[new_user] = new_user_account
 
     @classmethod
     def login(cls, username: str, password: str) -> bool:
@@ -119,7 +123,6 @@ class Accounts:
         :param password:
         :return:
         """
-        pass
         if username in cls.account_dict:
             user_test = cls.account_dict[username]
             user_pass = user_test.__repr__()
@@ -135,6 +138,3 @@ class Accounts:
 
     def __repr__(self):
         return self.__password
-
-
-
